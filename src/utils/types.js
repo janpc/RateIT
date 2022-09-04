@@ -1,0 +1,90 @@
+const types = {
+  educators: [
+    {
+      text: 'Universidad',
+      value: 'university'
+    },
+    {
+      text: 'Escuela',
+      value: 'school'
+    },
+    {
+      text: 'Bootcamp',
+      value: 'bootcamp'
+    },
+    {
+      text: 'Youtuber / Streamer',
+      value: 'youtuber'
+    },
+    {
+      text: 'Plataforma educativa',
+      value: 'educational-platform'
+    }
+  ],
+  courses: [
+    {
+      text: 'Grado',
+      value: 'degree'
+    },
+    {
+      text: 'Master',
+      value: 'master'
+    },
+    {
+      text: 'Bootcamp',
+      value: 'bootcamp'
+    },
+    {
+      text: 'Curso',
+      value: 'course'
+    }
+  ]
+}
+
+const attendence_type = [
+  {
+    text: 'Online',
+    value: 'online'
+  },
+  {
+    text: 'Presencial',
+    value: 'in_person'
+  },
+  {
+    text: 'Híbrido',
+    value: 'hybrid'
+  }
+]
+
+const speciality_type = [
+  {
+    text: 'Frontend',
+    value: 'frontend'
+  },
+  {
+    text: 'Backend',
+    value: 'backend'
+  },
+  {
+    text: 'Fullstack',
+    value: 'fullstack'
+  },
+  {
+    text: 'Mobile',
+    value: 'mobile'
+  },
+  {
+    text: 'Data Science',
+    value: 'data_science'
+  },
+  {
+    text: 'Machine Learning',
+    value: 'machine_learning'
+  },
+  {
+    text: 'Videojuegos',
+    value: 'videogames'
+  }
+]
+
+export { types, attendence_type, speciality_type }
