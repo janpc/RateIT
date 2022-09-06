@@ -10,6 +10,7 @@ import Select from '@/components//Select/'
 import Input from '@/components//Input'
 import { CenterContent, Form, Label, Button, Column, TopButtons, TopButton, Separator, Textarea, Error} from '@/assets/style'
 import { AddButton, PorfileImage, ImageInput } from './styles'
+import toast from 'react-hot-toast';
 
 
 export default function AddForm() {
@@ -26,6 +27,7 @@ export default function AddForm() {
   const [price, setPrice] = useState('');
   const [typeOfDocument, setTypeOfDocument] = useState("courses");
   const [educators, setEducators] = useState([]);
+  const [eds, setEds] = useState([]);
   const [errors, setErrors] = useState({})
 
   const setDocument = {
@@ -47,9 +49,12 @@ export default function AddForm() {
       }
     });
 
+    setEds(ed)
+
     ed = ed.map(({name, id}) => ({text: name, value: id}))
 
     setEducators(ed)
+    
   }
 
   function setEducator () {
@@ -89,7 +94,7 @@ export default function AddForm() {
     if (typeOfDocument === 'courses') {
       data.speciality_type = specialityType;
       data.attendence_type = attendenceType;
-      data.educator = educatorId;
+      data.educator = eds.find(({id}) => id === educatorId);
       data.price = price;
     }
 
@@ -97,16 +102,29 @@ export default function AddForm() {
 
     if (ok && typeOfDocument === 'educators' && profileImage) {
       const imgName = name + new Date().getTime()
-      data.image = await firebase.upload({file: profileImage, name: imgName})
-    } else {
+      const result = await firebase.upload({file: profileImage, name: imgName})
+      if (result.ok) {
+        data.image = result.url
+      } else {
+        toast('Algo ha fallado al subir la imagen')
+      }
+
+    } else if (ok) {
       err.image = 'Este campo es requerido!'
     }
 
     data.average_rating = 0;
     data.total_ratings = 0;
+    data.created_at = new Date().getTime();
 
     if (ok) {
-     /* firebase.add({database: typeOfDocument, data}) */
+     const result = await firebase.add({database: typeOfDocument, data})
+     if (result.ok) {
+      toast('Gracias por la información!');
+      setShow(false);
+    } else {
+      toast('Algo ha fallado al subir la información');
+    }
     }
 
     setErrors(err)

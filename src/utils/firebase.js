@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, getDocs, query, orderBy, addDoc, doc } from 'firebase/firestore';
+import { getFirestore, collection, getDocs, query, orderBy, addDoc, where } from 'firebase/firestore';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL  } from "firebase/storage";
 
 const firebaseConfig = {
@@ -16,24 +16,65 @@ const db = getFirestore(app);
 const storage = getStorage(app);
 
 // Get a list of cities from your database
-export async function get({database, order = {by: 'average_rating', type: 'desc'}}) {
+export async function get(options) {
+  const {
+    database,
+    sort = {
+      by: 'average_rating',
+      type: 'desc'
+    },
+    attendence_type = '',
+    speciality_type = '',
+    type = '',
+    price = ''
+  } = options
+
   const col = collection(db, database);
-  const q = query(col, orderBy(order.by, order.type));
+  let q = query(col);
+
+  if (sort.by !== '') {
+    q = query(q, orderBy(sort.by, sort.type));
+  }
+
+  if (attendence_type !== '') {
+    q = query(q, where("attendence_type", "==", attendence_type));
+  }
+
+  if (speciality_type !== '') {
+    q = query(q, where("speciality_type", "==", speciality_type));
+  }
+
+  if (type !== '') {
+    q = query(q, where("type", "==", type));
+  }
+
+  if (price !== '') {
+    q = query(q, where("price", "==", price));
+  }
+
   const snapshot = await getDocs(q);
   const list = snapshot.docs.map(doc =>({...doc.data(), id: doc.id}));
-  console.log(list);
   return list;
 }
 
 export async function add({database, data}) {
-  const result = await addDoc(collection(db, database), data);
-  console.log(result)
+  try {
+    await addDoc(collection(db, database), data);
+    return { ok: true }
+  } catch (e) {
+    console.log(e);
+    return { ok: false, error: e }
+  }
 }
 
 export async function upload({file, name}) {
-  var fileExt = file.name.split('.').pop();
-  const storageRef = ref(storage, `/images/${name}.${fileExt}`);
-  const uploadTask = await uploadBytesResumable(storageRef, file);
-  const url = await getDownloadURL(uploadTask.ref)
-  return url
+  try {
+    var fileExt = file.name.split('.').pop();
+    const storageRef = ref(storage, `/images/${name}.${fileExt}`);
+    const uploadTask = await uploadBytesResumable(storageRef, file);
+    const url = await getDownloadURL(uploadTask.ref)
+    return { ok: true, url }
+  } catch (e) {
+    return { ok: false, error: e }
+  }
 }

@@ -1,51 +1,39 @@
 import { useState, useEffect } from 'react';
 
-import { types, attendence_type, speciality_type } from '@/utils/types';
-import * as firebase from '@/utils/firebase'
+import { types, attendence_type, speciality_type, sort_types } from '@/utils/types';
+import { get } from '@/utils/firebase'
 
 import Dialogue from '@/components/Dialogue'
 import Select from '@/components//Select/'
-import Input from '@/components//Input'
 import { Form, Button, Column, TopButtons, TopButton, Separator } from '@/assets/style'
+import { FreeButton } from './styles'
+
+import { useDispatch } from 'react-redux'
+import { set } from '@/redux/reducer'
 
 
 export default function AddForm({show, close}) {
-  const [name, setName] = useState('');
   const [specialityType, setSpecialityType] = useState('');
   const [attendenceType, setAttendenceType] = useState('');
-  const [educatorId, setEducatorId] = useState('');
   const [type, setType] = useState('');
-  const [price, setPrice] = useState('');
+  const [sort, setSort] = useState('');
   const [typeOfDocument, setTypeOfDocument] = useState("courses");
-  const [educators, setEducators] = useState([]);
   const [errors, setErrors] = useState({})
+  const [free, setFree] = useState(false)
+
+  const dispatch = useDispatch()
+
 
   useEffect(() => {
-    if(typeOfDocument === "courses") {
-      getEducators()
-    }
+    clearDocument({})
+  // eslint-disable-next-line
   }, [typeOfDocument]);
 
   const setDocument = {
-    name: setName,
     type: setType,
-    educator: setEducatorId,
     speciality_type: setSpecialityType,
     attendence_type: setAttendenceType,
-    price: setPrice
-  }
-
-  async function getEducators() {
-    let ed = await firebase.get({
-      database: 'educators',
-      order:{
-        by: 'name'
-      }
-    });
-
-    ed = ed.map(({name, id}) => ({text: name, value: id}))
-
-    setEducators(ed)
+    sort: setSort
   }
 
   function setEducator () {
@@ -63,15 +51,22 @@ export default function AddForm({show, close}) {
 
     let data = {}
 
-    data.name = name;
     data.type = type;
+    data.sort = {
+      by: sort,
+      type: 'desc'
+    };
 
     if (typeOfDocument === 'courses') {
       data.speciality_type = specialityType;
       data.attendence_type = attendenceType;
-      data.educator = educatorId;
-      data.price = price;
+      data.price = free ? 0 : '';
     }
+
+    const list = await get({...data, database: typeOfDocument});
+
+    dispatch(set({data: list, type: typeOfDocument}))
+    close();
   }
 
   function handleChange (e) {
@@ -79,11 +74,17 @@ export default function AddForm({show, close}) {
     const value = e.target.value
     setDocument[name](value)
   }
+
+  function clearDocument () {
+    for (const key in setDocument) {
+      setDocument[key]('')
+    }
+  }
   return (
       <>
         <Dialogue show={show} close={close}>
           <TopButtons>
-            <TopButton 
+            <TopButton
               type="button"
               onClick={setCourse}
               selected={typeOfDocument === "courses"}
@@ -101,13 +102,13 @@ export default function AddForm({show, close}) {
           </TopButtons>
           <Form onSubmit={handleSubmit}>
             <Column>
-              <Input 
-                type="search"
-                placeholder="Buscar..."
-                id="search"
+              <Select
+                name="sort"
+                id="sort"
+                options={sort_types}
+                label="Ordenar por:"
                 onChange={handleChange}
-                error={errors.name}
-                label="Buscar:"
+                error={errors.type}
               />
               <Select
                 name="type"
@@ -116,9 +117,9 @@ export default function AddForm({show, close}) {
                 label="Tipo:"
                 onChange={handleChange}
                 error={errors.type}
-                />
+              />
               {
-                typeOfDocument === 'courses' && 
+                typeOfDocument === 'courses' &&
                   <>
                     <Select
                       name="speciality_type"
@@ -136,15 +137,11 @@ export default function AddForm({show, close}) {
                       onChange={handleChange}
                       error={errors.attendence_type}
                     />
-
-                    <Select
-                      name="educator"
-                      id="educator"
-                      options={educators}
-                      label="Educador:"
-                      onChange={handleChange}
-                      error={errors.educator}
-                    />
+                    <FreeButton
+                      type="button"
+                      active={free}
+                      onClick={() => setFree(!free)}
+                    >Gratis</FreeButton>
                   </>
               }
               <Button type="submit">Buscar</Button>

@@ -1,24 +1,25 @@
 import { useState } from 'react';
-import { FaSearch} from 'react-icons/fa';
-import Dialogue from '@/components/Dialogue'
-import { Header, HeaderContent, Logo, SearchForm, SearchInput, SearchButton, CloseButton } from './styles'
+import { FaFilter} from 'react-icons/fa';
+import { Link, useLocation } from "react-router-dom";
+
+import FilterForm from '@/components/FilterForm'
+import { Header, HeaderContent, Logo, FilterButton } from './styles'
 
 export default function H() {
   const [show, setShow] = useState(false);
+  const { pathname } = useLocation()
+
   return (
       <Header>
         <HeaderContent>
-          <Logo width="180"/>
-          <CloseButton type="button" onClick={() => setShow(true)}>
-            <FaSearch/>
-          </CloseButton>
+          <Link to='/'>
+            <Logo width="180"/>
+          </Link>
+          <FilterButton type="button" show={pathname === '/'} onClick={() => setShow(true)}>
+            <FaFilter/>
+          </FilterButton>
         </HeaderContent>
-        <Dialogue show={show} close={() => setShow(false)}>
-          <SearchForm>
-              <SearchInput type="text" placeholder="Buscar..."></SearchInput>
-              <SearchButton type="submit">Buscar</SearchButton>
-          </SearchForm>
-        </Dialogue>
+        <FilterForm show={show} close={() => setShow(false)} />
       </Header>
   );
 }

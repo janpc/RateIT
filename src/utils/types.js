@@ -87,4 +87,20 @@ const speciality_type = [
   }
 ]
 
-export { types, attendence_type, speciality_type }
+
+const sort_types = [
+  {
+    text: 'Puntuación',
+    value: 'average_rating'
+  },
+  {
+    text: 'Numero de puntuaciones',
+    value: 'total_ratings'
+  },
+  {
+    text: 'Creación',
+    value: 'created_at'
+  },
+]
+
+export { types, attendence_type, speciality_type, sort_types }

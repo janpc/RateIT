@@ -26,45 +26,7 @@ export const HeaderContent = styled.div`
 export const Logo = styled(logo)`
 `
 
-export const SearchForm = styled.form`
-  
-`
-
-export const SearchInput = styled.input`
-  border: none;
-  padding: 5px 15px;
-  font-size: 20px;
-  color: white;
-  border-radius: 5px;
-  background-color: ${colors.secondary.main};
-  position: static;
-  margin: 0 auto;
-
-  &:focus {
-    outline: none;
-  }
-  
-`
-
-export const SearchButton = styled.button`
-  border: none;
-  padding: 6px 10px;
-  font-size: 18px;
-  border-radius: 5px;
-  background-color: ${colors.primary.main};
-  color: ${colors.secondary.dark};
-  outline: none;
-  font-weight: 600;
-
-  &:focus, &:hover {
-    outline: none;
-    padding: 5px 10px;
-    border: 1px solid ${colors.secondary.dark};
-    background-color: ${colors.primary.light};
-  }
-`
-
-export const CloseButton = styled.button`
+export const FilterButton = styled.button`
   font-size: 28px;
   border: none;
   border-radius: 50%;
@@ -75,6 +37,9 @@ export const CloseButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
+
+  ${(props) => !props.show &&
+    "display: none;"}
 
 
   &:focus, &:hover {
