@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import colors from '@colors'
 
+export const mobileBreakdown = '500px';
+
 export const Main = styled.main`
   @import url("https://fonts.googleapis.com/css?family=Roboto:200,400,600&display=swap");
 
@@ -12,7 +14,7 @@ export const Main = styled.main`
   overflow: auto;
 
   background: rgb(2,0,36);
-  background: linear-gradient(${colors.secondary.dark} 10%, ${colors.secondary.main} 100%);
+  background: linear-gradient(${colors.secondary.main} 10%, ${colors.secondary.light} 100%);
 `;
 
 export const CenterContent = styled.div`

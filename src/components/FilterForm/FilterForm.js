@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
 import { types, attendence_type, speciality_type, sort_types } from '@/utils/types';
-import { get } from '@/utils/firebase'
+import { get } from '@database'
 
 import Dialogue from '@/components/Dialogue'
 import Select from '@/components//Select/'
@@ -9,7 +9,7 @@ import { Form, Button, Column, TopButtons, TopButton, Separator } from '@/assets
 import { FreeButton } from './styles'
 
 import { useDispatch } from 'react-redux'
-import { set } from '@/redux/reducer'
+import { set, setListShown } from '@/redux/reducer'
 
 
 export default function AddForm({show, close}) {
@@ -18,16 +18,20 @@ export default function AddForm({show, close}) {
   const [type, setType] = useState('');
   const [sort, setSort] = useState('');
   const [typeOfDocument, setTypeOfDocument] = useState("courses");
-  const [errors, setErrors] = useState({})
   const [free, setFree] = useState(false)
 
   const dispatch = useDispatch()
 
 
   useEffect(() => {
-    clearDocument({})
+    clearDocument()
   // eslint-disable-next-line
   }, [typeOfDocument]);
+
+  useEffect(() => {
+    console.log(type);
+  // eslint-disable-next-line
+  }, [type]);
 
   const setDocument = {
     type: setType,
@@ -38,12 +42,10 @@ export default function AddForm({show, close}) {
 
   function setEducator () {
     setTypeOfDocument("educators")
-    setErrors({})
   }
 
   function setCourse () {
     setTypeOfDocument("courses")
-    setErrors({})
   }
 
   async function handleSubmit (e) {
@@ -60,12 +62,13 @@ export default function AddForm({show, close}) {
     if (typeOfDocument === 'courses') {
       data.speciality_type = specialityType;
       data.attendence_type = attendenceType;
-      data.price = free ? 0 : '';
+      data.price = free ? '0' : '';
     }
 
     const list = await get({...data, database: typeOfDocument});
 
-    dispatch(set({data: list, type: typeOfDocument}))
+    dispatch(set({data: list, type: typeOfDocument}));
+    dispatch(setListShown(typeOfDocument));
     close();
   }
 
@@ -108,7 +111,7 @@ export default function AddForm({show, close}) {
                 options={sort_types}
                 label="Ordenar por:"
                 onChange={handleChange}
-                error={errors.type}
+                value={sort}
               />
               <Select
                 name="type"
@@ -116,7 +119,7 @@ export default function AddForm({show, close}) {
                 options={types[typeOfDocument]}
                 label="Tipo:"
                 onChange={handleChange}
-                error={errors.type}
+                value={type}
               />
               {
                 typeOfDocument === 'courses' &&
@@ -127,7 +130,7 @@ export default function AddForm({show, close}) {
                       options={speciality_type}
                       label="Especialidad:"
                       onChange={handleChange}
-                      error={errors.speciality_type}
+                      value={specialityType}
                     />
                     <Select
                       name="attendence_type"
@@ -135,7 +138,7 @@ export default function AddForm({show, close}) {
                       options={attendence_type}
                       label="Presencialidad:"
                       onChange={handleChange}
-                      error={errors.attendence_type}
+                      value={attendenceType}
                     />
                     <FreeButton
                       type="button"

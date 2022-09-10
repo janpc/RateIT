@@ -6,6 +6,7 @@ module.exports = {
       '@': path.resolve(__dirname, 'src/'),
       '@components': path.resolve(__dirname, 'src/components'),
       '@colors': path.resolve(__dirname, 'src/assets/colors'),
+      '@database': path.resolve(__dirname, 'src/utils/firebase'),
     }
   },
 };

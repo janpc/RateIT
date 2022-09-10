@@ -84,6 +84,14 @@ const speciality_type = [
   {
     text: 'Videojuegos',
     value: 'videogames'
+  },
+  {
+    text: 'Ciberseguridad',
+    value: 'cybersecurity'
+  },
+  {
+    text: 'UX/UI',
+    value: 'ux_ui'
   }
 ]
 
@@ -103,4 +111,10 @@ const sort_types = [
   },
 ]
 
-export { types, attendence_type, speciality_type, sort_types }
+function transformTypesToObject(types) {
+  const typesObject = {};
+  types.forEach(({text, value}) => {typesObject[value] = text})
+  return typesObject;
+}
+
+export { types, attendence_type, speciality_type, sort_types, transformTypesToObject }

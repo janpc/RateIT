@@ -1,6 +1,21 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, getDocs, query, orderBy, addDoc, where } from 'firebase/firestore';
-import { getStorage, ref, uploadBytesResumable, getDownloadURL  } from "firebase/storage";
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  query,
+  orderBy,
+  addDoc,
+  where,
+  doc,
+  getDoc
+} from 'firebase/firestore';
+import {
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL
+} from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDfptxqwlSEavXY2vi5PmLRooy4ZhHUPo8",
@@ -76,5 +91,16 @@ export async function upload({file, name}) {
     return { ok: true, url }
   } catch (e) {
     return { ok: false, error: e }
+  }
+}
+
+export async function getDocument({database, id}) {
+  const docRef = doc(db, database, id);
+  const docSnap = await getDoc(docRef);
+
+  if (docSnap.exists()) {
+    return { ok: true, data: docSnap.data()}
+  } else {
+    return { ok: false}
   }
 }

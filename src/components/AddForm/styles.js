@@ -20,6 +20,7 @@ export const AddButton = styled.button`
   bottom: 40px;
   right: 40px;
   cursor: pointer;
+  z-index: 1;
 
 
   &:focus, &:hover {

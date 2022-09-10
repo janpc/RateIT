@@ -8,7 +8,7 @@ export const DialogueBackground = styled.div`
   align-items: center;
   top: 0;
   left: 0;
-  z-index: 5;
+  z-index: 10;
   width: 100vw;
   height: 100vh;
 `;
@@ -19,7 +19,7 @@ export const Dialogue = styled.div`
   background-color: ${colors.secondary.dark};
   max-width: calc(100vw - 20px);
   max-height: calc(100vh - 50px);
-  z-index: 5;
+  z-index: 10;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   box-sizing: border-box;
   overflow: hiddend;

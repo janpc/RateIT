@@ -7,6 +7,7 @@ export const Header = styled.header`
   width: 100%;
   top: 0;
   left: 0;
+  z-index: 2;
   background-color: ${colors.secondary.dark};
 
   box-shadow: ${colors.secondary.dark} 0px 5px 15px;

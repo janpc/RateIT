@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { FaPlus} from 'react-icons/fa';
 
 import { types, attendence_type, speciality_type } from '@/utils/types';
-import * as firebase from '@/utils/firebase'
+import * as firebase from '@database'
 import { handleCreateErrors } from '@/utils/errors'
 
 import Dialogue from '@/components/Dialogue'
@@ -77,8 +77,9 @@ export default function AddForm() {
   function openModal () {
     if(typeOfDocument === "courses") {
       getEducators()
-      setShow(true)
     }
+
+    setShow(true)
   }
 
   async function handleSubmit (e) {
@@ -190,11 +191,13 @@ export default function AddForm() {
                 onChange={handleChange}
                 error={errors.name}
                 label="Nombre:"
+                value={name}
               />
               <Input
                 type="url"
                 placeholder="Link"
                 id="link"
+                value={link}
                 onChange={handleChange}
                 error={errors.link}
                 label="Link:"
@@ -206,6 +209,7 @@ export default function AddForm() {
                 rows="4"
                 onChange={handleChange}
                 error={errors.description}
+                value={description}
               />
               <Error display={errors.description} >{errors.description}</Error>
               <Select
@@ -215,9 +219,10 @@ export default function AddForm() {
                 label="Tipo:"
                 onChange={handleChange}
                 error={errors.type}
+                value={type}
                 />
               {
-                typeOfDocument === 'courses' && 
+                typeOfDocument === 'courses' &&
                   <>
                     <Select
                       name="speciality_type"
@@ -226,6 +231,7 @@ export default function AddForm() {
                       label="Especialidad:"
                       onChange={handleChange}
                       error={errors.speciality_type}
+                      value={specialityType}
                     />
                     <Select
                       name="attendence_type"
@@ -234,6 +240,7 @@ export default function AddForm() {
                       label="Presencialidad:"
                       onChange={handleChange}
                       error={errors.attendence_type}
+                      value={attendenceType}
                     />
 
                     <Select
@@ -243,6 +250,7 @@ export default function AddForm() {
                       label="Educador:"
                       onChange={handleChange}
                       error={errors.educator}
+                      value={educatorId}
                     />
                     <Input
                       type="number"
@@ -251,6 +259,7 @@ export default function AddForm() {
                       onChange={handleChange}
                       error={errors.price}
                       label="Precio:"
+                      value={price}
                     />
                   </>
               }

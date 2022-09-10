@@ -7,7 +7,7 @@ import {
   Route
 } from "react-router-dom";
 
-import { get } from '@/utils/firebase'
+import { get } from '@database'
 import { Main } from '@/assets/style'
 import Header from '@/components/Header'
 import List from '@/views/List'
