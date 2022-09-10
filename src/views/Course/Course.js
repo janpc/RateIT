@@ -2,7 +2,9 @@ import { useState, useEffect } from 'react'
 import { FaUser, FaStar, FaHouseUser, FaBook } from 'react-icons/fa'
 import { useParams } from 'react-router-dom';
 import { Rating } from 'react-simple-star-rating'
+import { useSelector, useDispatch } from 'react-redux'
 
+import { setElement } from '@/redux/reducer';
 import { getDocument } from '@database';
 import {
   attendence_type as attendence_types,
@@ -27,23 +29,32 @@ import colors from '@colors'
 const attendenceTypes = transformTypesToObject(attendence_types)
 const specialityTypes = transformTypesToObject(speciality_types)
 
+function tarnsformPrice(price) {
+  if (price && price == 0) {
+    return 'Gratis!'
+  }
 
+  return price?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + '€';
+}
 
 export default function Course() {
   let { id } = useParams();
 
-  const [ course, setCourse ] = useState(null);
+  const dispatch = useDispatch();
+  const { course } = useSelector((state) => state)
   const [ renderedPrice, setRenderedPrice ] = useState('')
 
   useEffect(() => {
-    getCourse()
+    if (course?.id !== id) {
+      getCourse()
+    }
   }, [])
 
   async function getCourse() {
     const {ok, data} = await getDocument({database: 'courses', id})
 
     if (ok) {
-      setCourse(data)
+      dispatch(setElement({data: data, type: 'course'}));
     }
   }
 
@@ -51,14 +62,6 @@ export default function Course() {
     const p = tarnsformPrice(course?.price)
     setRenderedPrice(p)
   }, [course])
-
-  function tarnsformPrice(price) {
-    if (price && price == 0) {
-      return 'Gratis!'
-    }
-
-    return price?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + '€';
-  }
 
   return (
     <CourseContainer>
@@ -68,7 +71,7 @@ export default function Course() {
         <CourseContent>
           <CourseTitle>{course?.name}</CourseTitle>
           <CourseDescription>{course?.description}</CourseDescription>
-          <MoreInfoLink href={course?.link}>Más Información</MoreInfoLink>
+          <MoreInfoLink href={course?.link} rel="noopener noreferrer" target="_blank">Más Información</MoreInfoLink>
         </CourseContent>
         <CourseInfo>
           <Rating

@@ -1,8 +1,7 @@
 import styled from 'styled-components';
 import colors from '@colors'
-import { Link } from "react-router-dom";
 
-export const EducatorContainer = styled(Link)`
+export const EducatorContainer = styled.button`
   width: 250px;
   margin: 20px 0;
   display: flex;
@@ -11,6 +10,9 @@ export const EducatorContainer = styled(Link)`
   gap: 10px;
   color: white;
   text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
 
   &:hover, &:focus {
     img {

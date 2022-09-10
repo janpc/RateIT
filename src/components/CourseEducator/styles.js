@@ -1,9 +1,8 @@
 import styled from 'styled-components';
 import colors from '@colors'
-import { Link } from "react-router-dom";
 import { mobileBreakdown } from '@/assets/style'
 
-export const EducatorContainer = styled(Link)`
+export const EducatorContainer = styled.button`
   width: 200px;
   padding: 20px;
   display: flex;
@@ -12,6 +11,9 @@ export const EducatorContainer = styled(Link)`
   gap: 10px;
   color: white;
   text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
 
   &:hover, &:focus {
     img {

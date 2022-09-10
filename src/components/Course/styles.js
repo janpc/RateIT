@@ -26,7 +26,7 @@ export const CourseMain = styled.div`
   }
 `;
 
-export const CourseContent = styled(Link)`
+export const CourseContent = styled.button`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -37,6 +37,9 @@ export const CourseContent = styled(Link)`
   box-sizing: border-box;
   color: white;
   text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
 
   &:hover, &:focus {
     h2 {

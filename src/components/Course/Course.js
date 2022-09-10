@@ -1,13 +1,36 @@
 import { useState, useEffect } from 'react'
 import { FaUser, FaStar, FaHouseUser, FaBook } from 'react-icons/fa'
+import { useDispatch } from 'react-redux'
+import { useNavigate } from "react-router-dom";
 
-import { attendence_type as attendence_types, speciality_type as speciality_types, transformTypesToObject } from '@/utils/types'
-
-import { CourseContainer, CourseMain, CourseContent, CourseTitle, CourseTopInfo, CoursePrice, CourseInfoRow } from './styles'
+import { setElement } from '@/redux/reducer';
 import CourseEducator from '@/components/CourseEducator'
+import {
+  attendence_type as attendence_types,
+  speciality_type as speciality_types,
+  transformTypesToObject
+} from '@/utils/types'
+import {
+  CourseContainer,
+  CourseMain,
+  CourseContent,
+  CourseTitle,
+  CourseTopInfo,
+  CoursePrice,
+  CourseInfoRow
+} from './styles'
+
 
 const attendenceTypes = transformTypesToObject(attendence_types)
 const specialityTypes = transformTypesToObject(speciality_types)
+
+function tarnsformPrice(price) {
+  if (price == 0) {
+    return 'Gratis!'
+  }
+
+  return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + '€';
+}
 
 export default function Course({info}) {
   const { name, price, attendence_type, average_rating, educator, speciality_type, total_ratings, id} = info
@@ -15,17 +38,21 @@ export default function Course({info}) {
   const [ renderedPrice, setRenderedPrice ] = useState('')
   const [ isHovered, setIsHovered ] = useState(false)
 
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   useEffect(() => {
     const p = tarnsformPrice(price)
     setRenderedPrice(p)
   }, [price])
 
-  function tarnsformPrice(price) {
-    if (price == 0) {
-      return 'Gratis!'
-    }
+  function setCourse() {
+    dispatch(setElement({data: info, type: 'course'}));
+  }
 
-    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + '€';
+  function go () {
+    setCourse();
+    navigate(`course/${id}`)
   }
 
   return (
@@ -33,7 +60,7 @@ export default function Course({info}) {
       <CourseMain>
         <CourseEducator educator={educator} />
         <CourseContent
-          to={`course/${id}`}
+          onClick={go}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >
