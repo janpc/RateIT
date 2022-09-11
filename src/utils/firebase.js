@@ -8,7 +8,8 @@ import {
   addDoc,
   where,
   doc,
-  getDoc
+  getDoc,
+  setDoc
 } from 'firebase/firestore';
 import {
   getStorage,
@@ -35,7 +36,7 @@ export async function get(options) {
   const {
     database,
     sort = {
-      by: 'average_rating',
+      by: '',
       type: 'desc'
     },
     attendence_type = '',
@@ -77,7 +78,6 @@ export async function add({database, data}) {
     await addDoc(collection(db, database), data);
     return { ok: true }
   } catch (e) {
-    console.log(e);
     return { ok: false, error: e }
   }
 }
@@ -102,5 +102,14 @@ export async function getDocument({database, id}) {
     return { ok: true, data: docSnap.data()}
   } else {
     return { ok: false}
+  }
+}
+
+export async function set({database, id, data}) {
+  try {
+    await setDoc(doc(db, database, id), data);
+    return { ok: true }
+  } catch (e) {
+    return { ok: false, error: e }
   }
 }

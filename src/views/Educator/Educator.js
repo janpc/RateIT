@@ -8,6 +8,7 @@ import { getDocument } from '@database';
 import { setElement } from '@/redux/reducer';
 import colors from '@colors'
 import { types, transformTypesToObject } from '@/utils/types'
+import Ratings from '@/components/Ratings'
 import {
   EducatorContainer,
   EducatorMain,
@@ -31,7 +32,7 @@ export default function Educator() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (educator?.id !== id) {
+    if (!id || educator?.id !== id) {
       getEducator()
     }
   }, [])
@@ -45,30 +46,33 @@ export default function Educator() {
   }
 
   return (
-    <EducatorContainer>
-      <EducatorMain>
-        <EducatorImage src={educator?.image} alt={educator?.name} />
-        <EducatorContent>
-          <EducatorTitle>{educator?.name}</EducatorTitle>
-          <EducatorDescription>{educator?.description}</EducatorDescription>
-        </EducatorContent>
-        <EducatorInfo>
-          <Rating
-            ratingValue={educator?.average_rating}
-            readonly
-            allowHalfIcon
-            fillColor={colors.primary.dark}
-            emptyColor={colors.primary.light}
-            size="35"
-          />
-          <EducatorTopInfo>
-            <span>{educator?.average_rating} <FaStar alt="Valoración"/></span>
-            <span>{educator?.total_ratings} <FaUser /></span>
-          </EducatorTopInfo>
-          <EducatorType>{educatorTypes[educator?.type]}</EducatorType>
-          <MoreInfoLink href={educator?.link}>Más Información</MoreInfoLink>
-        </EducatorInfo>
-      </EducatorMain>
-    </EducatorContainer>
+    <>
+      <EducatorContainer>
+        <EducatorMain>
+          <EducatorImage src={educator?.image} alt={educator?.name} />
+          <EducatorContent>
+            <EducatorTitle>{educator?.name}</EducatorTitle>
+            <EducatorDescription>{educator?.description}</EducatorDescription>
+          </EducatorContent>
+          <EducatorInfo>
+            <Rating
+              ratingValue={educator?.average_rating}
+              readonly
+              allowHalfIcon
+              fillColor={colors.primary.dark}
+              emptyColor={colors.primary.light}
+              size="35"
+            />
+            <EducatorTopInfo>
+              <span>{educator?.average_rating} <FaStar alt="Valoración"/></span>
+              <span>{educator?.total_ratings} <FaUser /></span>
+            </EducatorTopInfo>
+            <EducatorType>{educatorTypes[educator?.type]}</EducatorType>
+            <MoreInfoLink href={educator?.link}>Más Información</MoreInfoLink>
+          </EducatorInfo>
+        </EducatorMain>
+      </EducatorContainer>
+      <Ratings item={{...educator, id}} database="educators" type="educator"/>
+    </>
   );
 }

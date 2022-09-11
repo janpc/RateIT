@@ -3,9 +3,13 @@ import { createSlice } from '@reduxjs/toolkit'
 const initialState = {
   courses: [],
   educators: [],
-  listShown: 'courses',
+  listShown: '',
   course: {},
-  educator: {}
+  educator: {},
+  ratings: {
+    id: '',
+    list: []
+  },
 }
 
 export const slice = createSlice({
@@ -22,11 +26,14 @@ export const slice = createSlice({
     setElement: (state, { payload }) => {
       const { data, type} = payload
       state[type] = { ...data }
+    },
+    addRaitng: (state, { payload }) => {
+      state.ratings.list = [payload, ...state.ratings.list]
     }
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { set, setListShown, setElement } = slice.actions
+export const { set, setListShown, setElement, addRaitng } = slice.actions
 
 export default slice.reducer

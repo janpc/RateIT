@@ -41,6 +41,10 @@ export const CourseMain = styled.div`
       width: 200px;
       padding: 0;
       margin: 10px auto;
+
+      &>img {
+        margin: 20px 0;
+      }
     }
   }
 `;

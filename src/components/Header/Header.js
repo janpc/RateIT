@@ -12,10 +12,10 @@ export default function H() {
   return (
       <Header>
         <HeaderContent>
-          <Link to='/'>
-            <Logo width="180"/>
+          <Link to='/' className="main_logo">
+            <Logo width="180" />
           </Link>
-          <FilterButton type="button" show={pathname === '/'} onClick={() => setShow(true)}>
+          <FilterButton className="filter_button" type="button" show={pathname === '/'} onClick={() => setShow(true)}>
             <FaFilter/>
           </FilterButton>
         </HeaderContent>

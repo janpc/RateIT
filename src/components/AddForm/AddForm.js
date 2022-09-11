@@ -138,7 +138,7 @@ export default function AddForm() {
   }
   return (
       <>
-        <AddButton type="button" onClick={openModal}>
+        <AddButton className="add_button" type="button" onClick={openModal}>
           <FaPlus/>
         </AddButton>
         <Dialogue show={show} close={() => setShow(false)}>

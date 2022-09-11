@@ -25,6 +25,7 @@ import {
 } from './styles'
 import CourseEducator from '@/components/CourseEducator'
 import colors from '@colors'
+import Ratings from '@/components/Ratings'
 
 const attendenceTypes = transformTypesToObject(attendence_types)
 const specialityTypes = transformTypesToObject(speciality_types)
@@ -35,6 +36,10 @@ function tarnsformPrice(price) {
   }
 
   return price?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + '€';
+}
+
+function formatRating(rating) {
+  return (rating / 20).toFixed(1)
 }
 
 export default function Course() {
@@ -64,35 +69,37 @@ export default function Course() {
   }, [course])
 
   return (
-    <CourseContainer>
-      { course &&
-      <CourseMain>
-        <CourseEducator educator={course?.educator} />
-        <CourseContent>
-          <CourseTitle>{course?.name}</CourseTitle>
-          <CourseDescription>{course?.description}</CourseDescription>
-          <MoreInfoLink href={course?.link} rel="noopener noreferrer" target="_blank">Más Información</MoreInfoLink>
-        </CourseContent>
-        <CourseInfo>
-          <Rating
-            ratingValue={course?.average_rating}
-            readonly
-            allowHalfIcon
-            fillColor={colors.primary.dark}
-            emptyColor={colors.primary.light}
-            size="35"
-          />
-          <CourseTopInfo>
-            <span>{course?.average_rating} <FaStar alt="Valoración"/></span>
-            <span>{course?.total_ratings} <FaUser /></span>
-          </CourseTopInfo>
-          <CourseInfoRow><FaHouseUser />{attendenceTypes[course?.attendence_type]}</CourseInfoRow>
-          <CourseInfoRow><FaBook />{specialityTypes[course?.speciality_type]}</CourseInfoRow>
-          <CoursePrice>{renderedPrice}</CoursePrice>
-        </CourseInfo>
-      </CourseMain>
-      }
-    </CourseContainer>
+    !!course?.id &&
+    <>
+      <CourseContainer>
+        <CourseMain>
+          <CourseEducator educator={course?.educator} />
+          <CourseContent>
+            <CourseTitle>{course?.name}</CourseTitle>
+            <CourseDescription>{course?.description}</CourseDescription>
+            <MoreInfoLink href={course?.link} rel="noopener noreferrer" target="_blank">Más Información</MoreInfoLink>
+          </CourseContent>
+          <CourseInfo>
+            <Rating
+              ratingValue={course?.average_rating}
+              readonly
+              allowHalfIcon
+              fillColor={colors.primary.dark}
+              emptyColor={colors.primary.light}
+              size="35"
+            />
+            <CourseTopInfo>
+              <span>{formatRating(course?.average_rating)} <FaStar alt="Valoración"/></span>
+              <span>{course?.total_ratings} <FaUser /></span>
+            </CourseTopInfo>
+            <CourseInfoRow><FaHouseUser />{attendenceTypes[course?.attendence_type]}</CourseInfoRow>
+            <CourseInfoRow><FaBook />{specialityTypes[course?.speciality_type]}</CourseInfoRow>
+            <CoursePrice>{renderedPrice}</CoursePrice>
+          </CourseInfo>
+        </CourseMain>
+      </CourseContainer>
+      <Ratings item={course} database="courses" type="course"/>
+    </>
   )
 
 }

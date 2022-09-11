@@ -28,11 +28,6 @@ export default function AddForm({show, close}) {
   // eslint-disable-next-line
   }, [typeOfDocument]);
 
-  useEffect(() => {
-    console.log(type);
-  // eslint-disable-next-line
-  }, [type]);
-
   const setDocument = {
     type: setType,
     speciality_type: setSpecialityType,
