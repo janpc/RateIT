@@ -1,3 +1,7 @@
+body {
+  margin: 0;
+}
+
 .react-joyride__tooltip {
   background-color: #2a363b!important;
   color: white !important;
